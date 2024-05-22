@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../Axios";
-import { imageUrl } from "../../Constants/Constants"
+import { imageUrl, API_KEY } from "../../Constants/Constants"
 import Youtube from 'react-youtube'
 import "./RowPost.css";
 
 const RowPost = (props) => {
   let [movies, setMovies] = useState([]);
-//   let [urlId, setUrlId] = useState("")
+  let [urlId, setUrlId] = useState("")
 
   useEffect(() => {
     axios
@@ -15,7 +15,7 @@ const RowPost = (props) => {
         console.log(response);
         setMovies(response.data.results);
       })
-      .catch((err) => {
+      .catch((error) => {
         alert("Network Error");
       });
   }, []);
@@ -29,7 +29,16 @@ const RowPost = (props) => {
     },
   };
 
-  const handleMovie = (id)=>{}
+  const handleMovie = (id)=>{
+    console.log(id,"iddddddddd")
+    axios.get(`/movie/${id}/videos?language=en-US&api_key=${API_KEY}`).then((response)=>{
+      if(response.data.results.length!==0){
+        setUrlId(response.data.results[0])
+      }else{
+        console.log("array empty")
+      }
+    })
+  }
 
   return (
     <div className="row">
@@ -44,7 +53,7 @@ const RowPost = (props) => {
           />
         ))}
       </div>
-      <Youtube videoId="2g811Eo7K8U" opts={opts}/>
+      {urlId && <Youtube videoId={urlId.key} opts={opts}/>} 
     </div>
   );
 };

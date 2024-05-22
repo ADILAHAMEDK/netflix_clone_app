@@ -8,10 +8,19 @@ const Banner = () => {
   let [movie, setMovie] = useState();
 
   useEffect(()=>{
-    axios.get(`trending/all/week?api_key=${API_KEY}&language=en-US`).then((response)=>{
-      console.log(response.data)
-      setMovie(response.data.results[0]);
-    })
+   // random movies when refresh ui with api 
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get(`trending/all/week?api_key=${API_KEY}&language=en-US`);
+
+        setMovie(response.data.results[Math.floor(Math.random()*response.data.results.length)])
+      } catch (error) {
+        console.error("Failed to fetch movies", error);
+      }
+    };
+
+    fetchMovies();
+
   }, [])
   return (
     <div style={{backgroundImage:`url(${movie ? imageUrl + movie.backdrop_path : ""})`}} className="banner">
@@ -24,7 +33,6 @@ const Banner = () => {
         <h1 className="description">{movie ? movie.overview : ""}</h1>
       </div>
       <div className="fade-bottom"></div>
-     
     </div>
   );
 };

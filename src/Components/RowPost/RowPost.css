@@ -15,11 +15,18 @@
 }
 
 .big-poster{
+    cursor: pointer;
     max-height: 250px;
     margin-right: 10px;
 }
 
 .small-poster{
+    cursor: pointer;
     max-height: 150px;
     margin-right: 10px;
+}
+
+
+.big-poster:hover{
+    transform: scale(1.1);
 }
